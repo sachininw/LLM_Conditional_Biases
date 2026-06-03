@@ -1,0 +1,112 @@
+\begin{tikzpicture}[
+  font=\small,
+  every node/.style={align=center},
+  convbox/.style={
+    draw=gray!50, rounded corners=5pt, fill=boxbg,
+    minimum width=4.0cm, inner sep=5pt, text width=3.8cm,
+    font=\footnotesize
+  },
+  scorebox/.style={
+    draw, circle, fill=white,
+    minimum size=1.0cm, font=\footnotesize\bfseries,
+    inner sep=2pt
+  },
+  effectlabel/.style={font=\footnotesize\bfseries, midway},
+  colhead/.style={font=\small\bfseries, fill=white, inner sep=1pt},
+  stepbox/.style={
+    draw=gray!45, rounded corners=5pt,
+    minimum width=2.2cm, minimum height=0.82cm,
+    inner sep=5pt, font=\footnotesize, text width=2.1cm
+  },
+  arr/.style={-{Latex[length=4pt]}, gray!60, line width=0.85pt},
+  effarr/.style={-{Latex[length=5pt]}, line width=1.25pt},
+]
+
+%% ─── Dataset Generation row ──────────────────────────────────────────────────
+
+\node[font=\scriptsize\bfseries, text=gray!55, align=right, text width=1.6cm]
+  at (-6.0, 2.1) {Dataset\\Generation};
+
+\node[stepbox, fill=gray!6]           (inp)  at (-3.5, 2.1) {Scenario $x$\\Human bias $\gamma$};
+\node[stepbox, fill=biasedcolor!10]   (gen)  at ( 0.0, 2.1) {LLM\\Generator\\$T{=}1.0$};
+\node[stepbox, fill=neutralcolor!10, text width=2.3cm, minimum width=2.5cm]
+                                      (jury) at ( 3.5, 2.1) {3-Model\\Jury Panel};
+
+\draw[arr] (inp) -- (gen);
+\draw[arr] (gen) -- (jury);
+
+%% ─── Scenario / model bar ────────────────────────────────────────────────────
+
+\node[draw=gray!45, rounded corners=5pt, fill=white, minimum width=15.0cm,
+      minimum height=0.65cm, font=\footnotesize\bfseries] (scenario) at (0, 0.6)
+  {Scenario $x$ \;$|$\; Target bias $\beta$ \;$|$\; Human bias $\gamma$ \;$|$\; 8 LLMs \;$T{=}0.0$};
+
+%% ─── Column headers (fill=white covers background arrows passing through) ─────
+
+\node[colhead, text=nohumancolor] (hd1) at (-5.5, -0.05) {\textsc{No User Turn}};
+\node[colhead, text=neutralcolor] (hd2) at (  0.0, -0.05) {\textsc{Neutral Turn}};
+\node[colhead, text=biasedcolor]  (hd3) at (  5.5, -0.05) {\textsc{Biased Turn ($\gamma$)}};
+
+%% ─── Condition boxes ─────────────────────────────────────────────────────────
+
+\node[convbox, below=0.32cm of hd1, text=nohumancolor!70!black] (nh_box) {
+  \textbf{User:} ctrl template\\[2pt]
+  \textbf{Asst:} decision $a_1$\\[4pt]
+  \textbf{User:} treat template\\[2pt]
+  \textbf{Asst:} decision $a_2$
+};
+\node[convbox, below=0.32cm of hd2, text=neutralcolor!70!black] (n_box) {
+  \textbf{User:} common situation\\[2pt]
+  \textbf{User:} \textit{neutral message}\\[2pt]
+  \textbf{Asst:} response\\[2pt]
+  \textbf{User:} ctrl/treat $\Rightarrow a_{1,2}$
+};
+\node[convbox, below=0.32cm of hd3, text=biasedcolor!70!black] (b_box) {
+  \textbf{User:} common situation\\[2pt]
+  \textbf{User:} \textit{biased msg ($\gamma$)}\\[2pt]
+  \textbf{Asst:} response\\[2pt]
+  \textbf{User:} ctrl/treat $\Rightarrow a_{1,2}$
+};
+
+%% ─── Score nodes ─────────────────────────────────────────────────────────────
+
+\node[scorebox, below=0.35cm of nh_box, draw=nohumancolor, text=nohumancolor!70!black]
+  (s0) {$m_\varnothing$};
+\node[scorebox, below=0.35cm of n_box,  draw=neutralcolor, text=neutralcolor!70!black]
+  (sn) {$m_n$};
+\node[scorebox, below=0.35cm of b_box,  draw=biasedcolor,  text=biasedcolor!70!black]
+  (sb) {$m_b$};
+
+%% ─── Dashed arrows on background layer so headers/boxes render on top ─────────
+
+\begin{pgfonlayer}{background}
+  \foreach \nd in {nh_box, n_box, b_box}{
+    \draw[arr, dashed] (scenario.south) -- (\nd.north);
+  }
+\end{pgfonlayer}
+
+%% ─── Effect arrows ───────────────────────────────────────────────────────────
+
+\draw[effarr, presencecolor]
+  ([yshift=-0.55cm]s0.south) --
+  node[effectlabel, above, text=presencecolor, align=center] {
+    Presence effect\\[-1pt]
+    {\normalfont\scriptsize$\Delta_n = |m_n| - |m_\varnothing|$}
+  }
+  ([yshift=-0.55cm]sn.south);
+
+\draw[effarr, contentcolor]
+  ([yshift=-0.55cm]sn.south) --
+  node[effectlabel, above, text=contentcolor, align=center] {
+    Content effect\\[-1pt]
+    {\normalfont\scriptsize$\delta = |m_b| - |m_n|$}
+  }
+  ([yshift=-0.55cm]sb.south);
+
+\draw[effarr, totalcolor]
+  ([yshift=-1.10cm]s0.south) --
+  node[effectlabel, below, text=totalcolor]
+    {Total effect \; $\Delta_b = |m_b| - |m_\varnothing| = \Delta_n + \delta$}
+  ([yshift=-1.10cm]sb.south);
+
+\end{tikzpicture}
