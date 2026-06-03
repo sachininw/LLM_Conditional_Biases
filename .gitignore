@@ -24,3 +24,5 @@ latex/*.log
 latex/*.out
 latex/*.ptc
 latex/*.synctex.gz
+
+latex
