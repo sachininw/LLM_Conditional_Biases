@@ -1,11 +1,26 @@
-# Large data files — store outside version control
-run/data/conditional_decision_results/
-
 # Python
 __pycache__/
 *.py[cod]
 *.egg-info/
+.venv/
+venv/
 .env
+
+# Large generated data — download from the project data store (see README)
+run/data/
 
 # OS
 .DS_Store
+**/.DS_Store
+Thumbs.db
+
+# LaTeX build artifacts
+latex/*.aux
+latex/*.bbl
+latex/*.blg
+latex/*.fdb_latexmk
+latex/*.fls
+latex/*.log
+latex/*.out
+latex/*.ptc
+latex/*.synctex.gz

@@ -206,21 +206,6 @@ class GPT(LLM):
         return fixed_insertions
 
 
-class GptThreePointFiveTurbo(GPT):
-    """
-    A class representing a GPT-3.5-Turbo LLM that populates test cases according to the scenario 
-    starting from the brackets that are either identical for both control and treatment or unique for control, 
-    and then adding those unique for treatment.
-
-    Attributes:
-        NAME (str): The name of the model.
-    """
-
-    def __init__(self, randomly_flip_options: bool = False, shuffle_answer_options: bool = False):
-        super().__init__(randomly_flip_options=randomly_flip_options, shuffle_answer_options=shuffle_answer_options)
-        self.NAME = "gpt-3.5-turbo-0125"
-
-
 class GptFourO(GPT):
     """
     A class representing a GPT-4o LLM that populates test cases according to the scenario 
@@ -236,16 +221,3 @@ class GptFourO(GPT):
         super().__init__(randomly_flip_options=randomly_flip_options, shuffle_answer_options=shuffle_answer_options)
         self.NAME = "gpt-4o-2024-08-06"
         self.RESPONSE_FORMAT = "json_schema"
-        
-        
-class GptFourOMini(GPT):
-    """
-    A class representing a GPT-4o Mini LLM.
-
-    Attributes:
-        NAME (str): The name of the model.
-    """
-
-    def __init__(self, randomly_flip_options: bool = False, shuffle_answer_options: bool = False):
-        super().__init__(randomly_flip_options=randomly_flip_options, shuffle_answer_options=shuffle_answer_options)
-        self.NAME = "gpt-4o-mini-2024-07-18"

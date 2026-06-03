@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check syntax
+        run: |
+          python -m py_compile core/base.py core/testing.py core/utils.py demo.py
+          python -m py_compile models/OpenAI/model.py models/Anthropic/model.py
+          python -m py_compile models/Meta/model.py models/Google/model.py
+          python -m py_compile models/Alibaba/model.py models/DeepSeek/model.py models/Microsoft/model.py
+          python -m py_compile run/conditional_test_decision.py run/causal_analysis.py
+          python -m py_compile run/generate_message_bank.py run/human_simulator.py run/bias_jury.py
