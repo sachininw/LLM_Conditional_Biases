@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="latex/figures/llama/score_distributions_jp.png" width="80%" alt="Score distributions across three evaluation conditions (zero-shot, neutral turn, biased turn) for Llama-3.1-8B">
+  <img src="figures/score_distributions_jp.png" width="80%" alt="Score distributions across three evaluation conditions (zero-shot, neutral turn, biased turn) for Llama-3.1-8B">
 </p>
 
 <h1 align="center">Conditional Cognitive Bias in Instruction-Tuned LLMs</h1>
@@ -79,15 +79,15 @@ Prior work measured cognitive bias under zero-shot, context-free prompts — a s
 <table>
 <tr>
 <td align="center">
-  <img src="latex/figures/llama/heatmap_biased_jp.png" width="100%" alt="Biased-condition heatmap for Llama-3.1-8B"><br>
+  <img src="figures/heatmap_biased_jp.png" width="100%" alt="Biased-condition heatmap for Llama-3.1-8B"><br>
   <em>Biased condition (|mb|)</em>
 </td>
 <td align="center">
-  <img src="latex/figures/llama/heatmap_neutral_jp.png" width="100%" alt="Neutral-condition heatmap for Llama-3.1-8B"><br>
+  <img src="figures/heatmap_neutral_jp.png" width="100%" alt="Neutral-condition heatmap for Llama-3.1-8B"><br>
   <em>Neutral condition (|mn|)</em>
 </td>
 <td align="center">
-  <img src="latex/figures/llama/heatmap_delta_jp.png" width="100%" alt="Content effect heatmap for Llama-3.1-8B"><br>
+  <img src="figures/heatmap_delta_jp.png" width="100%" alt="Content effect heatmap for Llama-3.1-8B"><br>
   <em>Content effect (δ = |mb| − |mn|)</em>
 </td>
 </tr>
@@ -100,11 +100,11 @@ Rows = target LLM bias (β); columns = human-turn bias (γ). **Planning Fallacy*
 <table>
 <tr>
 <td align="center">
-  <img src="latex/figures/llama/sig_bonferroni_jp.png" width="100%" alt="Bonferroni-corrected significance grid"><br>
+  <img src="figures/sig_bonferroni_jp.png" width="100%" alt="Bonferroni-corrected significance grid"><br>
   <em>Bonferroni-corrected p-values</em>
 </td>
 <td align="center">
-  <img src="latex/figures/llama/sig_cohens_d_jp.png" width="100%" alt="Cohen's d effect size grid"><br>
+  <img src="figures/sig_cohens_d_jp.png" width="100%" alt="Cohen's d effect size grid"><br>
   <em>Cohen's d effect sizes</em>
 </td>
 </tr>
@@ -128,9 +128,9 @@ pip install -r requirements.txt
 
 | Provider | Environment Variable | Models |
 |---|---|---|
-| OpenAI | `OPENAI_API_KEY` | GPT-4o, GPT-4o-Mini, GPT-3.5-Turbo |
-| Anthropic | `ANTHROPIC_API_KEY` | Claude-3.5-Haiku, Claude-3.5-Sonnet |
-| Google | `GOOGLE_API` | Gemini-1.5-Pro/Flash, Gemma-2-9B-IT |
+| OpenAI | `OPENAI_API_KEY` | GPT-4o |
+| Anthropic | `ANTHROPIC_API_KEY` | Claude-3.5-Haiku |
+| Google | `GOOGLE_API` | Gemini-1.5-Pro, Gemini-2.5-Flash |
 | DeepInfra | `DEEPINFRA_API` | Llama-3.1-8B/70B, Qwen-2.5-72B, DeepSeek-V3, Phi-4, Gemma-2-9B-IT |
 
 ```bash
@@ -241,7 +241,7 @@ Evaluates the target LLM under all three conditions (zero-shot, neutral turn, bi
 python run/causal_analysis.py
 ```
 
-Runs Difference-in-Differences, Synthetic Control, and Propensity Score Matching on the decision results and produces all figures in `latex/figures/`.
+Runs Difference-in-Differences, Synthetic Control, and Propensity Score Matching on the decision results and produces all figures in `figures/`.
 
 ---
 
@@ -265,7 +265,7 @@ LLM_Conditional_Biases/
 │   ├── OpenAI/               # GPT family
 │   └── ...                   # Each folder: model.py + prompts.yml
 │
-├── tests/                    # Per-bias test definitions (30 biases supported)
+├── tests/                    # Per-bias test definitions (9 target biases)
 │   ├── Anchoring/
 │   │   ├── config.xml        # Template structure and custom value ranges
 │   │   └── test.py           # TestGenerator and Metric subclasses
@@ -291,12 +291,10 @@ LLM_Conditional_Biases/
 │   ├── generated_datasets/
 │   └── decision_results/
 │
-├── latex/                    # Paper manuscript and figures
-│   └── figures/              # Per-model and cross-model result plots
-│
+├── figures/                  # README figures (score distributions, heatmaps)
 ├── demo.py                   # Minimal single-bias usage example
 ├── requirements.txt
-└── LICENSE.txt
+└── LICENSE
 ```
 
 ---
